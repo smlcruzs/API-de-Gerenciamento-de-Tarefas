@@ -33,11 +33,33 @@ class Task:
     due_date: date | None = None
 
     def __post_init__(self) -> None:
-        if not self.title.strip():
+        self._validate_title(self.title)
+
+    @staticmethod
+    def _validate_title(title: str) -> None:
+        if not title.strip():
             raise ValueError("title must not be empty")
-        if len(self.title) > TITLE_MAX_LENGTH:
+        if len(title) > TITLE_MAX_LENGTH:
             raise ValueError(f"title must be at most {TITLE_MAX_LENGTH} characters")
 
     def update_status(self, new_status: TaskStatus) -> None:
         self.status = new_status
+        self.updated_at = datetime.utcnow()
+
+    def update_details(
+        self,
+        title: str | None = None,
+        description: str | None = None,
+        priority: TaskPriority | None = None,
+        due_date: date | None = None,
+    ) -> None:
+        if title is not None:
+            self._validate_title(title)
+            self.title = title
+        if description is not None:
+            self.description = description
+        if priority is not None:
+            self.priority = priority
+        if due_date is not None:
+            self.due_date = due_date
         self.updated_at = datetime.utcnow()
