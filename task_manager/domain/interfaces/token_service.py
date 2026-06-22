@@ -8,3 +8,7 @@ class TokenService(ABC):
     @abstractmethod
     def generate(self, user_id: UUID) -> str:
         ...
+
+    @abstractmethod
+    def decode(self, token: str) -> UUID:
+        ...
